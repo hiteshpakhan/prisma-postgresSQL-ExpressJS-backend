@@ -3,11 +3,22 @@ import { featchComments, createComment, updateComment,  featchComment, deleteCom
 
 const router = Router();
 
+//for getting all comments
 router.get("/", featchComments);
+
+//for getting all comments with info about user and comment
 router.get("/with/userandpost", featchCommentsWithUserandPost);
+
+//for getting specific comment
 router.get("/:id", featchComment);
+
+// creating comment
 router.post("/", createComment);
+
+// update comment
 router.put("/:id", updateComment);
+
+//deleting commnent
 router.delete("/:id", deleteComment);
 
 

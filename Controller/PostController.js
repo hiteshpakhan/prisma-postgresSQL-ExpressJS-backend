@@ -1,5 +1,9 @@
 import prisma from "../DB/db.config.js";
 
+
+//now we will see how to get all posts data 
+export const featchPosts = async (req, res) => {
+    const posts = await prisma.post.findMany({
 // orderBy: {
 //     id: "desc",
 // }
@@ -39,10 +43,6 @@ import prisma from "../DB/db.config.js";
 //         }
 //     }
 // }
-//now we will see how to get all posts data 
-export const featchPosts = async (req, res) => {
-    const posts = await prisma.post.findMany({
-        
     });
 
     return res.json({status: 200, data: posts});
@@ -165,4 +165,44 @@ export const deletePost = async (req, res) => {
     })
 
     return res.json({status: 200, message: "Post Deleted"});
+}
+
+//to  search post
+export const searchPost = async (req, res) => {
+    const query = req.query.q;
+    const posts = await prisma.post.findMany({
+        where: {
+            title: {
+                search: query,
+            }
+        }
+    });
+
+    return res.json({status: 200, data: posts});
+}
+
+//get the post data by using pagination
+export const gettingPostsUsingPagination = async (req, res) => {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    if(page <= 0){
+        page = 1;
+    }
+
+    if(limit <= 0 || limit > 100){
+        limit = 10;
+    }
+
+    const skip = (page - 1) * limit;
+
+    const posts = await prisma.post.findMany({
+        skip: skip,
+        take: limit
+    });
+
+    const totalPosts = await prisma.post.count();
+    const totalPages = Math.ceil(totalPosts / limit);
+
+    return res.json({status: 200, data: posts, meta:{totalPages, currentPage: page, limit}});
 }

@@ -1,10 +1,14 @@
 import { Router } from "express";
-import { createPost, deletePost, featchPosts, featchPost, updatePost, featchPostsWithComments, featchPostWithCommentWithUser, postsCommentsUserName } from "../Controller/PostController.js";
+import { createPost, deletePost, featchPosts, featchPost, updatePost, featchPostsWithComments, featchPostWithCommentWithUser, postsCommentsUserName, searchPost, gettingPostsUsingPagination } from "../Controller/PostController.js";
 
 const router = Router();
 
 //get all posts
 router.get("/", featchPosts);
+// searching the post
+router.get("/search/posts", searchPost);
+// geting post by using pagination
+router.get("/use/pagination", gettingPostsUsingPagination);
 //get specific post
 router.get("/:id", featchPost);
 //get post with comment
